@@ -1,7 +1,7 @@
 .DS_Store
 *.rds
 data/
-puzzles/
+/puzzles/
 *.Rhistory
 *.RData
 .Rproj.user
