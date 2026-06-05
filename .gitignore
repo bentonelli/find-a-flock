@@ -5,3 +5,5 @@ puzzles/
 *.Rhistory
 *.RData
 .Rproj.user
+*.Rproj
+.claude/
