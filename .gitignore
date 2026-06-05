@@ -1,0 +1,7 @@
+.DS_Store
+*.rds
+data/
+puzzles/
+*.Rhistory
+*.RData
+.Rproj.user

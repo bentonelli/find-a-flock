@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Find-A-Flock</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐦</text></svg>">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+
+    <header id="header">
+      <div class="header-brand">
+        <span class="brand-name">Find-A-Flock</span>
+        <div id="header-birds"></div>
+      </div>
+      <div class="header-date" id="header-date"></div>
+      <div class="header-actions">
+        <button class="icon-btn" id="how-to-play-btn" title="How to play" aria-label="How to play">
+          <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+            <circle cx="10" cy="10" r="8.5" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M10 13.5v-.5M10 11c0-1.5 1.8-1.5 1.8-3a1.8 1.8 0 10-3.6 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <div id="layout">
+
+      <aside id="sidebar">
+        <div class="sidebar-inner">
+
+          <div class="sidebar-top">
+            <p class="sidebar-eyebrow">Today's Flock</p>
+            <p class="sidebar-sub">Where do all 5 <u>breeding</u> species co-occur?</p>
+            <ul id="species-list" class="species-list" aria-label="Today's bird species"></ul>
+          </div>
+
+          <div id="sidebar-state">
+
+            <div id="state-prompt" class="state-card">
+              <span id="pre-guess-badge" class="difficulty-badge hidden"></span>
+              <div class="prompt-icon">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="24" cy="20" r="9" stroke="var(--border)" stroke-width="2.5"/>
+                  <path d="M24 29 L24 42" stroke="var(--border)" stroke-width="2.5" stroke-linecap="round"/>
+                  <path d="M18 36 L24 42 L30 36" stroke="var(--border)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <p>Click anywhere on the map to guess</p>
+            </div>
+
+            <div id="state-result" class="state-card hidden">
+              <span id="difficulty-badge" class="difficulty-badge hidden"></span>
+              <span id="score-value" class="score-value">0</span>
+              <p id="result-message" class="result-message"></p>
+              <p id="distance-text" class="distance-text"></p>
+              <button id="share-btn" class="share-btn">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+                  <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                  <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                </svg>
+                Share
+              </button>
+              <p class="comeback-text">New flock every day</p>
+            </div>
+
+            <div id="stats-grid" class="stats-grid hidden">
+              <div class="stat-cell">
+                <img class="stat-bird" alt="">
+                <span class="stat-value" id="stat-total">—</span>
+                <span class="stat-label">TOTAL PTS</span>
+              </div>
+              <div class="stat-cell">
+                <img class="stat-bird" alt="">
+                <span class="stat-value" id="stat-streak">—</span>
+                <span class="stat-label">STREAK</span>
+              </div>
+              <div class="stat-cell">
+                <img class="stat-bird" alt="">
+                <span class="stat-value" id="stat-perfect">—</span>
+                <span class="stat-label">PERFECTS</span>
+              </div>
+              <div class="stat-cell">
+                <img class="stat-bird" alt="">
+                <span class="stat-value" id="stat-pstreak">—</span>
+                <span class="stat-label">PERF STREAK</span>
+              </div>
+            </div>
+
+            <div id="history-bars" class="history-bars hidden"></div>
+
+            <div id="learn-more" class="learn-more hidden">
+              <p class="learn-more-heading">Learn more about these birds!</p>
+              <ul id="learn-more-list" class="learn-more-list"></ul>
+            </div>
+
+          </div>
+        </div>
+      </aside>
+
+      <main id="map-wrapper">
+        <div id="map"></div>
+        <div id="map-hint">Click the map to guess</div>
+        <div id="map-legend">
+          <span class="legend-line"></span>
+          <span class="legend-label">GAME AREA</span>
+        </div>
+      </main>
+
+    </div>
+
+    <footer id="footer-bar">
+      <span class="footer-text">Brought to you by the team at:</span>
+      <a href="https://apps.apple.com/us/app/poke-a-bird/id6761445070" target="_blank" rel="noopener noreferrer" class="footer-link">
+        🐦 POKE-A-BIRD
+        <span class="footer-store">→ APP STORE</span>
+      </a>
+    </footer>
+
+  </div>
+
+  <div id="modal-overlay" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal">
+      <button class="modal-close" id="modal-close" aria-label="Close">×</button>
+      <h2 class="modal-title" id="modal-title">How to Play</h2>
+      <div class="modal-body">
+        <p>Five bird species are drawn using data from the <strong>North American Breeding Bird Survey</strong>.</p>
+        <p>These five species have all been observed <em>together</em> at survey routes across North America.</p>
+        <p><strong>Your goal:</strong> click the map where you think all 5 breeding species co-occur.</p>
+        <div class="score-guide">
+          <div class="guide-row">
+            <span class="guide-dot" style="background:var(--green)"></span>
+            <span>Inside the co-occurrence zone</span>
+            <strong><span id="modal-max-score">500</span> pts</strong>
+          </div>
+          <div class="guide-row">
+            <span class="guide-dot" style="background:var(--gold)"></span>
+            <span>Within ~500 km</span>
+            <strong>~half max</strong>
+          </div>
+          <div class="guide-row">
+            <span class="guide-dot" style="background:var(--amber)"></span>
+            <span>Getting warm…</span>
+            <strong>~30% max</strong>
+          </div>
+          <div class="guide-row">
+            <span class="guide-dot" style="background:var(--red)"></span>
+            <span>Far away</span>
+            <strong>few pts</strong>
+          </div>
+        </div>
+        <p class="modal-difficulty-heading">Difficulty is based on zone size — smaller zones score more:</p>
+        <div class="difficulty-tiers">
+          <div class="tier-row"><span class="tier-dot" style="background:#2a5a1a"></span><span class="tier-label">Easy</span><span class="tier-pts">250 max pts</span></div>
+          <div class="tier-row"><span class="tier-dot" style="background:#2a4a8a"></span><span class="tier-label">Medium</span><span class="tier-pts">500 max pts</span></div>
+          <div class="tier-row"><span class="tier-dot" style="background:#b06820"></span><span class="tier-label">Hard</span><span class="tier-pts">750 max pts</span></div>
+          <div class="tier-row"><span class="tier-dot" style="background:#a83020"></span><span class="tier-label">Very Hard</span><span class="tier-pts">1000 max pts</span></div>
+        </div>
+        <p class="modal-footnote"> One guess per day!</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/@turf/turf@6.5.0/turf.min.js"></script>
+  <script src="birds.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
