@@ -29,6 +29,18 @@ async function init() {
   checkPreviousGuess();
   showStats();
   initTestMode();
+  initSidebarToggle();
+}
+
+/* ── Mobile sidebar toggle ────────────────────────────── */
+function initSidebarToggle() {
+  const btn = document.getElementById('sidebar-toggle');
+  const sidebar = document.getElementById('sidebar');
+  if (!btn || !sidebar) return;
+  btn.addEventListener('click', () => {
+    const collapsed = sidebar.classList.toggle('collapsed');
+    btn.textContent = collapsed ? 'SPECIES ▼' : 'SPECIES ▲';
+  });
 }
 
 /* ── Header birds + favicon ───────────────────────────── */

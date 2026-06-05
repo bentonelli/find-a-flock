@@ -764,6 +764,9 @@ body::after {
   background: var(--dark) !important;
 }
 
+/* ── Sidebar toggle (mobile only) ──────────────────────── */
+#sidebar-toggle { display: none; }
+
 /* ── Mobile ────────────────────────────────────────────── */
 @media (max-width: 720px) {
   #layout { flex-direction: column; }
@@ -772,9 +775,39 @@ body::after {
     height: auto; max-height: 44vh;
     border-right: none; border-bottom: 2px solid var(--border);
     overflow-y: auto;
+    transition: max-height .25s ease, opacity .25s ease;
+  }
+  #sidebar.collapsed {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    border-bottom: none;
   }
   .sidebar-inner { padding: 10px 12px; gap: 8px; }
   #map-wrapper { flex: 1; min-height: 0; border-left: none; }
+
+  /* Toggle button */
+  #sidebar-toggle {
+    display: block;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 500;
+    background: var(--panel);
+    border: 2px solid var(--border);
+    color: var(--text);
+    font-family: 'Press Start 2P', monospace;
+    font-size: .4rem;
+    letter-spacing: .05em;
+    padding: 6px 10px;
+    cursor: pointer;
+    transition: background .15s, color .15s;
+  }
+  #sidebar-toggle:hover {
+    background: var(--blue);
+    color: #fff;
+    border-color: var(--blue);
+  }
 
   /* Header: shrink title and birds so nothing wraps */
   .header-date { display: none; }
