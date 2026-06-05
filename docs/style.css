@@ -776,8 +776,6 @@ body::after {
     border-right: none; border-bottom: 2px solid var(--border);
     overflow-y: auto;
     transition: max-height .25s ease, opacity .25s ease;
-    display: flex;
-    flex-direction: column;
   }
   #sidebar.collapsed {
     max-height: 0;
@@ -789,7 +787,7 @@ body::after {
     max-height: calc(100vh - var(--header-h) - 40px);
     flex: 1;
   }
-  .sidebar-inner { padding: 10px 12px; gap: 8px; flex: 1; overflow-y: auto; }
+  .sidebar-inner { padding: 10px 12px; gap: 8px; }
   #map-wrapper { flex: 1; min-height: 0; border-left: none; }
   #map-wrapper.collapsed { display: none; }
 
@@ -816,25 +814,27 @@ body::after {
     border-color: var(--blue);
   }
 
-  /* Map toggle — bottom of sidebar panel */
+  /* Map toggle — fixed, always visible above footer */
   #map-toggle {
     display: block;
-    width: 100%;
-    background: var(--dark);
-    border: none;
-    border-top: 2px solid var(--border);
-    color: var(--dim);
+    position: fixed;
+    bottom: 50px;
+    right: 10px;
+    z-index: 600;
+    background: var(--panel);
+    border: 2px solid var(--border);
+    color: var(--text);
     font-family: 'Press Start 2P', monospace;
     font-size: .4rem;
     letter-spacing: .05em;
-    padding: 7px 10px;
+    padding: 6px 10px;
     cursor: pointer;
     transition: background .15s, color .15s;
-    flex-shrink: 0;
   }
   #map-toggle:hover {
     background: var(--blue);
     color: #fff;
+    border-color: var(--blue);
   }
 
   /* Header: shrink title and birds so nothing wraps */

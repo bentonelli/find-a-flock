@@ -7,13 +7,15 @@ library(jsonlite)
 route_totals <- readRDS("data/route_totals.rds")
 sp_aous      <- read.csv("data/bbs_sp_aous.csv")
 
-dir.create("www/puzzles", recursive = TRUE, showWarnings = FALSE)
+dir.create("docs/puzzles", recursive = TRUE, showWarnings = FALSE)
+
+SEED_SALT <- 9999  # increment to regenerate all puzzles with a new set
 
 rts_all <- unique(route_totals$route_name)
 
 generate_puzzle <- function(date_str) {
   # Deterministic seed from date so the same puzzle is always produced for a given day
-  set.seed(as.integer(gsub("-", "", date_str))+1)
+  set.seed(as.integer(gsub("-", "", date_str)) + SEED_SALT)
 
   for (attempt in 1:30) {
     wildcard_route <- sample(rts_all, 1)
@@ -82,7 +84,7 @@ dates <- format(seq(Sys.Date(), Sys.Date() + 365, by = "day"), "%Y-%m-%d")
 cat(sprintf("Generating %d puzzles...\n", length(dates)))
 
 for (date_str in dates) {
-  outfile <- file.path("www/puzzles", paste0(date_str, ".json"))
+  outfile <- file.path("docs/puzzles", paste0(date_str, ".json"))
   #if (file.exists(outfile)) {
   #  cat("  skip  ", date_str, "\n")
   #  next
