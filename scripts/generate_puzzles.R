@@ -13,7 +13,7 @@ rts_all <- unique(route_totals$route_name)
 
 generate_puzzle <- function(date_str) {
   # Deterministic seed from date so the same puzzle is always produced for a given day
-  set.seed(as.integer(gsub("-", "", date_str)))
+  set.seed(as.integer(gsub("-", "", date_str))+1)
 
   for (attempt in 1:30) {
     wildcard_route <- sample(rts_all, 1)
@@ -77,7 +77,7 @@ generate_puzzle <- function(date_str) {
 }
 
 # Generate puzzles from today through the next 365 days
-dates <- format(seq(Sys.Date(), Sys.Date() + 100, by = "day"), "%Y-%m-%d")
+dates <- format(seq(Sys.Date(), Sys.Date() + 365, by = "day"), "%Y-%m-%d")
 
 cat(sprintf("Generating %d puzzles...\n", length(dates)))
 
