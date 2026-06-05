@@ -30,16 +30,33 @@ async function init() {
   showStats();
   initTestMode();
   initSidebarToggle();
+  initMapToggle();
 }
 
 /* ── Mobile sidebar toggle ────────────────────────────── */
 function initSidebarToggle() {
   const btn = document.getElementById('sidebar-toggle');
   const sidebar = document.getElementById('sidebar');
+  const mapWrapper = document.getElementById('map-wrapper');
   if (!btn || !sidebar) return;
   btn.addEventListener('click', () => {
     const collapsed = sidebar.classList.toggle('collapsed');
     btn.textContent = collapsed ? 'SPECIES ▼' : 'SPECIES ▲';
+    if (collapsed) mapWrapper.classList.remove('collapsed');
+  });
+}
+
+/* ── Mobile map toggle ────────────────────────────────── */
+function initMapToggle() {
+  const btn = document.getElementById('map-toggle');
+  const sidebar = document.getElementById('sidebar');
+  const mapWrapper = document.getElementById('map-wrapper');
+  if (!btn || !mapWrapper) return;
+  btn.addEventListener('click', () => {
+    const collapsed = mapWrapper.classList.toggle('collapsed');
+    btn.textContent = collapsed ? 'MAP ▲' : 'MAP ▼';
+    sidebar.classList.toggle('map-hidden', collapsed);
+    if (collapsed) sidebar.classList.remove('collapsed');
   });
 }
 

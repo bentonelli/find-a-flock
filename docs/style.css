@@ -764,8 +764,8 @@ body::after {
   background: var(--dark) !important;
 }
 
-/* ── Sidebar toggle (mobile only) ──────────────────────── */
-#sidebar-toggle { display: none; }
+/* ── Sidebar/map toggles (mobile only) ─────────────────── */
+#sidebar-toggle, #map-toggle { display: none; }
 
 /* ── Mobile ────────────────────────────────────────────── */
 @media (max-width: 720px) {
@@ -776,6 +776,8 @@ body::after {
     border-right: none; border-bottom: 2px solid var(--border);
     overflow-y: auto;
     transition: max-height .25s ease, opacity .25s ease;
+    display: flex;
+    flex-direction: column;
   }
   #sidebar.collapsed {
     max-height: 0;
@@ -783,15 +785,20 @@ body::after {
     overflow: hidden;
     border-bottom: none;
   }
-  .sidebar-inner { padding: 10px 12px; gap: 8px; }
+  #sidebar.map-hidden {
+    max-height: calc(100vh - var(--header-h) - 40px);
+    flex: 1;
+  }
+  .sidebar-inner { padding: 10px 12px; gap: 8px; flex: 1; overflow-y: auto; }
   #map-wrapper { flex: 1; min-height: 0; border-left: none; }
+  #map-wrapper.collapsed { display: none; }
 
-  /* Toggle button */
+  /* Species toggle — top-right of map */
   #sidebar-toggle {
     display: block;
     position: absolute;
     top: 10px;
-    left: 10px;
+    right: 10px;
     z-index: 500;
     background: var(--panel);
     border: 2px solid var(--border);
@@ -807,6 +814,27 @@ body::after {
     background: var(--blue);
     color: #fff;
     border-color: var(--blue);
+  }
+
+  /* Map toggle — bottom of sidebar panel */
+  #map-toggle {
+    display: block;
+    width: 100%;
+    background: var(--dark);
+    border: none;
+    border-top: 2px solid var(--border);
+    color: var(--dim);
+    font-family: 'Press Start 2P', monospace;
+    font-size: .4rem;
+    letter-spacing: .05em;
+    padding: 7px 10px;
+    cursor: pointer;
+    transition: background .15s, color .15s;
+    flex-shrink: 0;
+  }
+  #map-toggle:hover {
+    background: var(--blue);
+    color: #fff;
   }
 
   /* Header: shrink title and birds so nothing wraps */
