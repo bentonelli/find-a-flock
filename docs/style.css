@@ -68,7 +68,7 @@ body::after {
 }
 
 /* ── App shell ─────────────────────────────────────────── */
-#app { display: flex; flex-direction: column; height: 100vh; }
+#app { display: flex; flex-direction: column; height: 100vh; height: 100dvh; }
 
 /* ── Header ────────────────────────────────────────────── */
 #header {
@@ -103,15 +103,6 @@ body::after {
   font-size: .88rem;
   color: var(--blue);
   letter-spacing: 1px;
-  text-shadow:
-    2px 2px 0px #162d5a,
-    0 0 12px rgba(42,74,138,.35);
-  animation: title-glow 2.5s ease-in-out infinite alternate;
-}
-
-@keyframes title-glow {
-  from { text-shadow: 2px 2px 0 #162d5a, 0 0  8px rgba(42,74,138,.25); }
-  to   { text-shadow: 2px 2px 0 #162d5a, 0 0 18px rgba(42,74,138,.55); }
 }
 
 .header-date {
