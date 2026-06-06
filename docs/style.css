@@ -777,9 +777,10 @@ body::after {
   #map-wrapper { display: none; border-left: none; }
   #map-hint { display: none; }
 
-  /* When map is open: show map, shrink sidebar */
+  /* When map is open: show map, collapse sidebar to just the button */
   #layout.map-open #map-wrapper { display: flex; flex: 1; min-height: 0; }
-  #layout.map-open #sidebar { flex: none; height: 44vh; }
+  #layout.map-open #sidebar { flex: none; height: auto; border-bottom: none; }
+  #layout.map-open .sidebar-inner { display: none; }
 
   /* Open/Hide Map button — pinned to bottom of sidebar */
   .open-map-btn {
