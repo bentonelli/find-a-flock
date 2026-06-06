@@ -92,8 +92,8 @@ body::after {
 }
 
 .header-bird {
-  width: 34px;
-  height: 34px;
+  width: 44px;
+  height: 44px;
   image-rendering: pixelated;
   image-rendering: crisp-edges;
 }
@@ -321,8 +321,8 @@ body::after {
 }
 
 .stat-bird {
-  width: 36px;
-  height: 36px;
+  width: 48px;
+  height: 48px;
   image-rendering: pixelated;
   image-rendering: crisp-edges;
 }
@@ -755,78 +755,49 @@ body::after {
   background: var(--dark) !important;
 }
 
-/* ── Sidebar/map toggles (mobile only) ─────────────────── */
-#sidebar-toggle, #map-toggle { display: none; }
+/* ── Open Map button (mobile only) ─────────────────────── */
+.open-map-btn { display: none; }
 
 /* ── Mobile ────────────────────────────────────────────── */
 @media (max-width: 720px) {
   #layout { flex-direction: column; }
+
+  /* Sidebar fills screen by default (map hidden) */
   #sidebar {
     width: 100%; min-width: unset;
-    height: auto; max-height: 44vh;
-    border-right: none; border-bottom: 2px solid var(--border);
-    overflow-y: auto;
-    transition: max-height .25s ease, opacity .25s ease;
-  }
-  #sidebar.collapsed {
-    max-height: 0;
-    opacity: 0;
-    overflow: hidden;
-    border-bottom: none;
-  }
-  #sidebar.map-hidden {
-    max-height: calc(100vh - var(--header-h) - 40px);
     flex: 1;
+    border-right: none; border-bottom: 2px solid var(--border);
+    overflow-y: hidden;
+    display: flex;
+    flex-direction: column;
   }
-  .sidebar-inner { padding: 10px 12px; gap: 8px; }
-  #map-wrapper { flex: 1; min-height: 0; border-left: none; }
-  #map-wrapper.collapsed { display: none; }
+  .sidebar-inner { padding: 10px 12px; gap: 8px; flex: 1; overflow-y: auto; }
 
-  /* Species toggle — top-right of map */
-  #sidebar-toggle {
-    display: block;
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    z-index: 500;
-    background: var(--panel);
-    border: 2px solid var(--border);
-    color: var(--text);
-    font-family: 'Press Start 2P', monospace;
-    font-size: .4rem;
-    letter-spacing: .05em;
-    padding: 6px 10px;
-    cursor: pointer;
-    transition: background .15s, color .15s;
-  }
-  #sidebar-toggle:hover {
-    background: var(--blue);
-    color: #fff;
-    border-color: var(--blue);
-  }
+  /* Map hidden by default on mobile */
+  #map-wrapper { display: none; border-left: none; }
+  #map-hint { display: none; }
 
-  /* Map toggle — fixed, always visible above footer */
-  #map-toggle {
+  /* When map is open: show map, shrink sidebar */
+  #layout.map-open #map-wrapper { display: flex; flex: 1; min-height: 0; }
+  #layout.map-open #sidebar { flex: none; height: 44vh; }
+
+  /* Open/Hide Map button — pinned to bottom of sidebar */
+  .open-map-btn {
     display: block;
-    position: fixed;
-    bottom: 50px;
-    right: 10px;
-    z-index: 600;
-    background: var(--panel);
-    border: 2px solid var(--border);
-    color: var(--text);
-    font-family: 'Press Start 2P', monospace;
-    font-size: .4rem;
-    letter-spacing: .05em;
-    padding: 6px 10px;
-    cursor: pointer;
-    transition: background .15s, color .15s;
-  }
-  #map-toggle:hover {
+    flex-shrink: 0;
+    padding: 10px 18px;
     background: var(--blue);
+    border: none;
+    border-top: 2px solid #162d5a;
     color: #fff;
-    border-color: var(--blue);
+    font-family: 'Press Start 2P', monospace;
+    font-size: .55rem;
+    letter-spacing: .5px;
+    cursor: pointer;
+    width: 100%;
+    transition: background .15s;
   }
+  .open-map-btn:hover { background: #162d5a; }
 
   /* Header: shrink title and birds so nothing wraps */
   .header-date { display: none; }

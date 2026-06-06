@@ -29,34 +29,18 @@ async function init() {
   checkPreviousGuess();
   showStats();
   initTestMode();
-  initSidebarToggle();
-  initMapToggle();
+  initMobileMapToggle();
 }
 
-/* ── Mobile sidebar toggle ────────────────────────────── */
-function initSidebarToggle() {
-  const btn = document.getElementById('sidebar-toggle');
-  const sidebar = document.getElementById('sidebar');
-  const mapWrapper = document.getElementById('map-wrapper');
-  if (!btn || !sidebar) return;
+/* ── Mobile open/hide map button ──────────────────────── */
+function initMobileMapToggle() {
+  const btn = document.getElementById('open-map-btn');
+  const layout = document.getElementById('layout');
+  if (!btn || !layout) return;
   btn.addEventListener('click', () => {
-    const collapsed = sidebar.classList.toggle('collapsed');
-    btn.textContent = collapsed ? 'SPECIES ▼' : 'SPECIES ▲';
-    if (collapsed) mapWrapper.classList.remove('collapsed');
-  });
-}
-
-/* ── Mobile map toggle ────────────────────────────────── */
-function initMapToggle() {
-  const btn = document.getElementById('map-toggle');
-  const sidebar = document.getElementById('sidebar');
-  const mapWrapper = document.getElementById('map-wrapper');
-  if (!btn || !mapWrapper) return;
-  btn.addEventListener('click', () => {
-    const collapsed = mapWrapper.classList.toggle('collapsed');
-    btn.textContent = collapsed ? 'MAP ▲' : 'MAP ▼';
-    sidebar.classList.toggle('map-hidden', collapsed);
-    if (collapsed) sidebar.classList.remove('collapsed');
+    const open = layout.classList.toggle('map-open');
+    btn.textContent = open ? 'Hide Map' : 'Open Map';
+    if (open && map) map.invalidateSize();
   });
 }
 
