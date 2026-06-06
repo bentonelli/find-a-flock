@@ -57,7 +57,7 @@
                   <path d="M18 36 L24 42 L30 36" stroke="var(--border)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               </div>
-              <p>Click anywhere on the map to guess</p>
+              <p>Click the map to guess</p>
             </div>
 
             <div id="state-result" class="state-card hidden">
@@ -140,28 +140,7 @@
         <p>Five bird species are drawn using data from the <strong>North American Breeding Bird Survey</strong>.</p>
         <p>These five species have all been observed <em>together</em> at survey routes across North America.</p>
         <p><strong>Your goal:</strong> click the map where you think all 5 breeding species co-occur.</p>
-        <div class="score-guide">
-          <div class="guide-row">
-            <span class="guide-dot" style="background:var(--green)"></span>
-            <span>Inside the co-occurrence zone</span>
-            <strong><span id="modal-max-score">500</span> pts</strong>
-          </div>
-          <div class="guide-row">
-            <span class="guide-dot" style="background:var(--gold)"></span>
-            <span>Within ~500 km</span>
-            <strong>~half max</strong>
-          </div>
-          <div class="guide-row">
-            <span class="guide-dot" style="background:var(--amber)"></span>
-            <span>Getting warm…</span>
-            <strong>~30% max</strong>
-          </div>
-          <div class="guide-row">
-            <span class="guide-dot" style="background:var(--red)"></span>
-            <span>Far away</span>
-            <strong>few pts</strong>
-          </div>
-        </div>
+        <p>You get one guess!</p>
         <p class="modal-difficulty-heading">Difficulty is based on zone size — smaller zones score more:</p>
         <div class="difficulty-tiers">
           <div class="tier-row"><span class="tier-dot" style="background:#2a5a1a"></span><span class="tier-label">Easy</span><span class="tier-pts">250 max pts</span></div>
@@ -169,7 +148,6 @@
           <div class="tier-row"><span class="tier-dot" style="background:#b06820"></span><span class="tier-label">Hard</span><span class="tier-pts">750 max pts</span></div>
           <div class="tier-row"><span class="tier-dot" style="background:#a83020"></span><span class="tier-label">Very Hard</span><span class="tier-pts">1000 max pts</span></div>
         </div>
-        <p class="modal-footnote"> One guess per day!</p>
         <label class="modal-dont-show">
           <input type="checkbox" id="dont-show-again">
           Don't show again
