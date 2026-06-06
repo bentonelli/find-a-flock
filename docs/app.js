@@ -522,8 +522,25 @@ function checkPreviousGuess() {
 }
 
 /* ── Modal ────────────────────────────────────────────── */
+const HIDE_MODAL_KEY = 'findaflock_hide_howtoplay';
+
 function setupModal() {
-  const overlay = document.getElementById('modal-overlay');
+  const overlay  = document.getElementById('modal-overlay');
+  const checkbox = document.getElementById('dont-show-again');
+
+  // Auto-show on first visit
+  if (localStorage.getItem(HIDE_MODAL_KEY) !== 'true') {
+    overlay.classList.remove('hidden');
+  }
+
+  // Reflect saved preference in checkbox
+  checkbox.checked = localStorage.getItem(HIDE_MODAL_KEY) === 'true';
+
+  // Save preference immediately when toggled
+  checkbox.addEventListener('change', () => {
+    localStorage.setItem(HIDE_MODAL_KEY, checkbox.checked ? 'true' : 'false');
+  });
+
   document.getElementById('how-to-play-btn').addEventListener('click', () => overlay.classList.remove('hidden'));
   document.getElementById('modal-close').addEventListener('click',      () => overlay.classList.add('hidden'));
   overlay.addEventListener('click', e => { if (e.target === overlay) overlay.classList.add('hidden'); });

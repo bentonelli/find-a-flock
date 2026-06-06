@@ -677,6 +677,29 @@ body::after {
   font-style: italic;
 }
 
+.modal-dont-show {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: var(--bg);
+  border: 2px solid var(--border);
+  font-family: 'VT323', monospace;
+  font-size: 1.05rem;
+  color: var(--dim);
+  letter-spacing: .5px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.modal-dont-show input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+  flex-shrink: 0;
+  accent-color: var(--green);
+}
+
 /* ── Toast ─────────────────────────────────────────────── */
 .toast {
   position: fixed;
