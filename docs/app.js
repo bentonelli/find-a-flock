@@ -190,9 +190,9 @@ function handleGuess(lat, lng, fromStorage) {
 /* ── Scoring ──────────────────────────────────────────── */
 function calcMaxScore(hull) {
   const areaSqKm = turf.area(turf.feature(hull)) / 1e6;
-  if (areaSqKm < 150000)    return 1000;  // Very Hard
-  if (areaSqKm < 300000)   return 750;   // Hard
-  if (areaSqKm < 1250000)  return 500;   // Medium
+  if (areaSqKm < 200000)    return 1000;  // Very Hard
+  if (areaSqKm < 500000)   return 750;   // Hard
+  if (areaSqKm < 1500000)  return 500;   // Medium
   return 250;                             // Easy
 }
 
