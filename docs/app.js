@@ -1,5 +1,5 @@
 /* ── Config ───────────────────────────────────────────── */
-const DECAY_KM    = 500;
+const DECAY_KM    = 2000;
 const STORAGE_KEY = 'findaflock_guess';
 const HISTORY_KEY     = 'findaflock_history';
 
@@ -408,11 +408,25 @@ function showLearnMore(species) {
 }
 
 /* ── Share ────────────────────────────────────────────── */
+const SHARE_PHRASES = [
+  "If you're not flockin', you ain't rockin'",
+  "Flock it like it's hot",
+  "Tic Toc, time to flock",
+  "Flock up!",
+  "If u talk the talk, u gotta flock the flock",
+  "Meet the Flockers",
+  "Stop squawking, start flocking",
+  "Activate bird brain",
+  "These flocks aren't gonna find themselves!",
+  "Birds = Life"
+];
+
 function shareResult() {
   const score   = parseInt(document.getElementById('score-value').textContent, 10);
   const dateStr = getTodayStr();
   const emoji   = score >= maxScore ? '🟢' : score >= maxScore * 0.6 ? '🟡' : score >= maxScore * 0.3 ? '🟠' : '🔴';
-  const text    = `Find-A-Flock — ${dateStr}\n${emoji} ${score}/${maxScore} pts\n\n🐦 If you're not flockin', you ain't rockin'\nfind-a-flock.com`;
+  const phrase  = SHARE_PHRASES[Math.floor(Math.random() * SHARE_PHRASES.length)];
+  const text    = `Find-A-Flock — ${dateStr}\n${emoji} ${score}/${maxScore} pts\n\n🐦 ${phrase}\nfind-a-flock.com`;
 
   if (navigator.clipboard) {
     navigator.clipboard.writeText(text).then(() => showToast('Copied to clipboard!'));
