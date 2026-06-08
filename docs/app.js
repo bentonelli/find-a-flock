@@ -397,7 +397,7 @@ function showLearnMore(species) {
   ul.innerHTML  = '';
 
   species.forEach(name => {
-    const slug = name.replace(/ /g, '_');
+    const slug = name.replace(/'/g, '').replace(/ /g, '_');
     const url  = `https://www.allaboutbirds.org/guide/${slug}/overview`;
     const li   = document.createElement('li');
     li.innerHTML = `<a href="${url}" target="_blank" rel="noopener noreferrer">${name}</a>`;
