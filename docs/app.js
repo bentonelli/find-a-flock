@@ -409,16 +409,18 @@ function showLearnMore(species) {
 
 /* ── Share ────────────────────────────────────────────── */
 const SHARE_PHRASES = [
-  "If you're not flockin', you ain't rockin'",
-  "Flock it like it's hot",
-  "Tic Toc, time to flock",
-  "Flock up!",
-  "If u talk the talk, u gotta flock the flock",
-  "Meet the Flockers",
-  "Stop squawking, start flocking",
-  "Activate bird brain",
+  "If you're not flockin', you ain't rockin'.",
+  "Flock it like it's hot.",
+  "Tick-Tock, time to flock.",
+  "If u talk the talk, u gotta flock the flock.",
+  "Meet the Flockers.",
+  "Stop squawking, start flocking.",
+  "Bird brain activated.",
   "These flocks aren't gonna find themselves!",
-  "Birds = Life"
+  "Flock around and find out (where these birds overlap).",
+  "This game will knock your flocks off!",
+  "I need a flocktail after that score...",
+  "Twist it, pull it, flick it, flock it."
 ];
 
 function shareResult() {
