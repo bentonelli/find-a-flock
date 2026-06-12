@@ -176,6 +176,7 @@ function handleGuess(lat, lng, fromStorage) {
   const distKm  = distToPolygon(lat, lng, currentPuzzle.hull);
 
   placeGuessMarker(lat, lng);
+  showScorePopup(lat, lng, score);
   revealPolygon(currentPuzzle.hull);
   if (distKm > 0) drawDistanceLine(lat, lng, currentPuzzle.hull);
   if (score >= maxScore) explodeBirds(lat, lng);
@@ -240,6 +241,17 @@ function distToPolygon(lat, lng, hull) {
 }
 
 /* ── Map visuals ──────────────────────────────────────── */
+function showScorePopup(lat, lng, score) {
+  const icon = L.divIcon({
+    className: '',
+    html: `<div class="score-popup-wrap"><div class="score-popup">${score}</div></div>`,
+    iconSize: [0, 0],
+    iconAnchor: [0, 0]
+  });
+  const marker = L.marker([lat, lng], { icon, interactive: false }).addTo(map);
+  setTimeout(() => marker.remove(), 2500);
+}
+
 function placeGuessMarker(lat, lng) {
   const icon = L.divIcon({
     className: '',
@@ -420,6 +432,8 @@ const SHARE_PHRASES = [
   "Flock around and find out (where these birds overlap).",
   "This game will knock your flocks off!",
   "I need a flocktail after that score...",
+  "Flock, Flock – Who's there?",
+  "Flock and load",
   "Twist it, pull it, flick it, flock it."
 ];
 
@@ -465,11 +479,11 @@ function offsetDate(dateStr, days) {
   return [d.getFullYear(), String(d.getMonth()+1).padStart(2,'0'), String(d.getDate()).padStart(2,'0')].join('-');
 }
 
-function calcStreak(entries) {
+function calcStreak(entries, playedToday) {
   const today     = getTodayStr();
   const yesterday = offsetDate(today, -1);
   const dateSet   = new Set(entries.map(e => e.date));
-  const start     = dateSet.has(today) ? today : dateSet.has(yesterday) ? yesterday : null;
+  const start     = dateSet.has(today) ? today : (!playedToday && dateSet.has(yesterday)) ? yesterday : null;
   if (!start) return 0;
   let n = 0, d = start;
   while (dateSet.has(d)) { n++; d = offsetDate(d, -1); }
@@ -480,9 +494,10 @@ function showStats() {
   const history = loadHistory();
   if (history.length === 0) return;
   const totalScore    = history.reduce((s, e) => s + e.score, 0);
-  const streak        = calcStreak(history);
+  const playedToday   = history.some(e => e.date === getTodayStr());
+  const streak        = calcStreak(history, playedToday);
   const perfectFlocks = history.filter(e => e.score === (e.maxScore ?? 500)).length;
-  const perfectStreak = calcStreak(history.filter(e => e.score === (e.maxScore ?? 500)));
+  const perfectStreak = calcStreak(history.filter(e => e.score === (e.maxScore ?? 500)), playedToday);
 
   document.getElementById('stat-total').textContent   = totalScore.toLocaleString();
   document.getElementById('stat-streak').textContent  = streak;
