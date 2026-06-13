@@ -790,6 +790,25 @@ body::after {
 
 #test-bar button:hover { background: #f5e060; }
 
+#test-bar.hidden { display: none; }
+
+#test-dot {
+  position: fixed;
+  bottom: 52px;
+  right: 16px;
+  width: 18px;
+  height: 18px;
+  background: var(--gold);
+  border: 2px solid var(--text);
+  box-shadow: 3px 3px 0 var(--text);
+  cursor: pointer;
+  z-index: 9999;
+}
+
+#test-dot:hover { background: #f5e060; }
+
+#test-dot.hidden { display: none; }
+
 /* ── Leaflet overrides ─────────────────────────────────── */
 .leaflet-container { font-family: 'VT323', monospace; }
 .leaflet-control-attribution { font-size: .65rem; }

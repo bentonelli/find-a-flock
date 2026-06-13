@@ -578,6 +578,8 @@ function setupModal() {
 }
 
 /* ── Test mode ────────────────────────────────────────── */
+const TEST_BAR_HIDDEN_KEY = 'findaflock_test_bar_hidden';
+
 function initTestMode() {
   const params = new URLSearchParams(window.location.search);
   if (!params.has('test')) return;
@@ -592,8 +594,24 @@ function initTestMode() {
     <span id="test-date">${dateStr}</span>
     <button id="test-next" title="Next day">►</button>
     <button id="test-reset" title="Reset today's guess so you can replay">RESET DAY</button>
+    <button id="test-hide" title="Hide test bar">×</button>
   `;
   document.body.appendChild(bar);
+
+  const dot = document.createElement('div');
+  dot.id = 'test-dot';
+  dot.title = 'Show test bar';
+  document.body.appendChild(dot);
+
+  function setHidden(hidden) {
+    bar.classList.toggle('hidden', hidden);
+    dot.classList.toggle('hidden', !hidden);
+    localStorage.setItem(TEST_BAR_HIDDEN_KEY, hidden ? '1' : '0');
+  }
+  setHidden(localStorage.getItem(TEST_BAR_HIDDEN_KEY) === '1');
+
+  document.getElementById('test-hide').addEventListener('click', () => setHidden(true));
+  dot.addEventListener('click', () => setHidden(false));
 
   document.getElementById('test-prev').addEventListener('click', () => {
     navigate(offsetDate(dateStr, -1));
