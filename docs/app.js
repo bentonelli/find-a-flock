@@ -4,7 +4,7 @@ const STORAGE_KEY = 'findaflock_guess';
 const HISTORY_KEY     = 'findaflock_history';
 
 /* ── State ────────────────────────────────────────────── */
-let map, currentPuzzle;
+let map, currentPuzzle, regionFeature, regionReadyPromise;
 let hasGuessed = false;
 let maxScore   = 500;
 
@@ -23,7 +23,7 @@ async function init() {
   applyDifficultyTheme();
   populateSpecies(currentPuzzle.species);
   initMap();
-  loadRegionBoundary();
+  await loadRegionBoundary();
   setupModal();
   assignStatBirds();
   checkPreviousGuess();
@@ -146,25 +146,56 @@ function initMap() {
 }
 
 async function loadRegionBoundary() {
-  try {
-    const res = await fetch('region.geojson');
-    if (!res.ok) return;
-    const data = await res.json();
-    L.geoJSON(data, {
-      style: {
-        color: '#8a7a6a',
-        weight: 1.5,
-        fillOpacity: 0,
-        dashArray: '6 8',
-        opacity: 0.55
-      },
-      interactive: false
-    }).addTo(map);
-  } catch (_) {}
+  regionReadyPromise = (async () => {
+    try {
+      const res = await fetch('region.geojson');
+      if (!res.ok) return null;
+      const data = await res.json();
+      regionFeature = data.features?.[0] ?? data;
+
+      // Grey overlay outside game region (inverse donut polygon)
+      const geom = regionFeature.geometry ?? regionFeature;
+      const worldRing = [[-180, -90], [180, -90], [180, 90], [-180, 90], [-180, -90]];
+      const holes = geom.type === 'MultiPolygon'
+        ? geom.coordinates.map(poly => poly[0])
+        : [geom.coordinates[0]];
+      const greyStyle = { fillColor: '#000', fillOpacity: 0.15, stroke: false };
+      L.geoJSON({
+        type: 'Feature',
+        geometry: { type: 'Polygon', coordinates: [worldRing, ...holes] }
+      }, { style: greyStyle, interactive: false }).addTo(map);
+      // Solid grey for adjacent repeated map copies (east and west)
+      [[-540, -180], [180, 540]].forEach(([w, e]) => {
+        L.geoJSON({
+          type: 'Feature',
+          geometry: { type: 'Polygon', coordinates: [[[w, -90], [e, -90], [e, 90], [w, 90], [w, -90]]] }
+        }, { style: greyStyle, interactive: false }).addTo(map);
+      });
+
+      L.geoJSON(data, {
+        style: {
+          color: '#8a7a6a',
+          weight: 1.5,
+          fillOpacity: 0,
+          dashArray: '6 8',
+          opacity: 0.55
+        },
+        interactive: false
+      }).addTo(map);
+      return regionFeature;
+    } catch (_) { return null; }
+  })();
+  return regionReadyPromise;
 }
 
-function onMapClick(e) {
+async function onMapClick(e) {
   if (hasGuessed) return;
+  const pt = turf.point([e.latlng.lng, e.latlng.lat]);
+  const rf = await regionReadyPromise;
+  if (rf && !turf.booleanPointInPolygon(pt, rf)) {
+    showOutOfBounds(e.latlng.lat, e.latlng.lng);
+    return;
+  }
   handleGuess(e.latlng.lat, e.latlng.lng, false);
 }
 
@@ -191,9 +222,9 @@ function handleGuess(lat, lng, fromStorage) {
 /* ── Scoring ──────────────────────────────────────────── */
 function calcMaxScore(hull) {
   const areaSqKm = turf.area(turf.feature(hull)) / 1e6;
-  if (areaSqKm < 200000)    return 1000;  // Very Hard
-  if (areaSqKm < 500000)   return 750;   // Hard
-  if (areaSqKm < 1500000)  return 500;   // Medium
+  if (areaSqKm < 500000)   return 1000;  // Very Hard
+  if (areaSqKm < 1250000)  return 750;   // Hard
+  if (areaSqKm < 2500000)  return 500;   // Medium
   return 250;                             // Easy
 }
 
@@ -241,6 +272,17 @@ function distToPolygon(lat, lng, hull) {
 }
 
 /* ── Map visuals ──────────────────────────────────────── */
+function showOutOfBounds(lat, lng) {
+  const icon = L.divIcon({
+    className: '',
+    html: '<div class="score-popup-wrap"><div class="score-popup">Out of Bounds!</div></div>',
+    iconSize: [0, 0],
+    iconAnchor: [0, 0]
+  });
+  const marker = L.marker([lat, lng], { icon, interactive: false }).addTo(map);
+  setTimeout(() => marker.remove(), 1800);
+}
+
 function showScorePopup(lat, lng, score) {
   const icon = L.divIcon({
     className: '',
@@ -434,7 +476,15 @@ const SHARE_PHRASES = [
   "I need a flocktail after that score...",
   "Flock, Flock – Who's there?",
   "Flock and load",
-  "Twist it, pull it, flick it, flock it."
+  "Twist it, pull it, flick it, flock it.",
+  "That's what I'm flockin' about!",
+  "Favorite bird: Northern Flocker.",
+  "This game will knock your flocks off.",
+  "Flocked and loaded.",
+  "Think outside the flocks.",
+  "My head is so big they call me Jack 'n the Flocks",
+  "Flock-a-Bye baby.",
+  "Looks like you just landed on Plymouth Flock"
 ];
 
 function shareResult() {

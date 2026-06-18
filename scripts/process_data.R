@@ -11,7 +11,7 @@ bbs_in_all <- bbs_in_all %>%
 bbs_in_all <- bbs_in_all %>% select(route_data_id,country_num,state_num,route,rpid,year,aou,total_seen)
 
 bbs_in_all <- bbs_in_all %>% 
-  filter(year >= 2010)
+  filter(year >= 1980)
 
 route_totals <- bbs_in_all %>%
   group_by(country_num,state_num,route,aou) %>%
@@ -23,4 +23,4 @@ route_info <- bbs_in[[2]]  %>%
 
 route_totals <- merge(route_totals,route_info,by=c("country_num","state_num","route"))
 
-saveRDS(route_totals,"route_totals.rds")
+saveRDS(route_totals,"data/route_totals_80.rds")
