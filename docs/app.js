@@ -464,6 +464,7 @@ function showLearnMore(species) {
 /* ── Share ────────────────────────────────────────────── */
 const SHARE_PHRASES = [
   "If you're not flockin', you ain't rockin'.",
+  "Favorite song: Walk It, Flock It ft. Drake",
   "Flock it like it's hot.",
   "Tick-Tock, time to flock.",
   "If u talk the talk, u gotta flock the flock.",
