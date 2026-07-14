@@ -7,6 +7,7 @@ const HISTORY_KEY     = 'findaflock_history';
 let map, currentPuzzle, regionFeature, regionReadyPromise;
 let hasGuessed = false;
 let maxScore   = 500;
+let currentScore;
 
 /* ── Boot ─────────────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded', init);
@@ -205,6 +206,7 @@ function handleGuess(lat, lng, fromStorage) {
 
   const score   = calcScore(lat, lng, currentPuzzle.hull);
   const distKm  = distToPolygon(lat, lng, currentPuzzle.hull);
+  currentScore  = score;
 
   placeGuessMarker(lat, lng);
   showScorePopup(lat, lng, score);
@@ -489,7 +491,7 @@ const SHARE_PHRASES = [
 ];
 
 function shareResult() {
-  const score   = parseInt(document.getElementById('score-value').textContent, 10);
+  const score   = currentScore;
   const dateStr = getTodayStr();
   const emoji   = score >= maxScore ? '🟢' : score >= maxScore * 0.6 ? '🟡' : score >= maxScore * 0.3 ? '🟠' : '🔴';
   const phrase  = SHARE_PHRASES[Math.floor(Math.random() * SHARE_PHRASES.length)];
