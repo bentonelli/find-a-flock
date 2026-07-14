@@ -543,21 +543,35 @@ function calcStreak(entries, playedToday) {
   return n;
 }
 
+function calcLongestStreak(entries) {
+  const dates = [...new Set(entries.map(e => e.date))].sort();
+  let longest = 0, current = 0, prev = null;
+  for (const d of dates) {
+    current = (prev && offsetDate(prev, 1) === d) ? current + 1 : 1;
+    longest = Math.max(longest, current);
+    prev = d;
+  }
+  return longest;
+}
+
 function showStats() {
   const history = loadHistory();
   if (history.length === 0) return;
-  const totalScore    = history.reduce((s, e) => s + e.score, 0);
-  const playedToday   = history.some(e => e.date === getTodayStr());
-  const streak        = calcStreak(history, playedToday);
-  const perfectFlocks = history.filter(e => e.score === (e.maxScore ?? 500)).length;
-  const perfectStreak = calcStreak(history.filter(e => e.score === (e.maxScore ?? 500)), playedToday);
+  const totalScore     = history.reduce((s, e) => s + e.score, 0);
+  const playedToday    = history.some(e => e.date === getTodayStr());
+  const perfectEntries = history.filter(e => e.score === (e.maxScore ?? 500));
+  const streak         = calcStreak(history, playedToday);
+  const perfectFlocks  = perfectEntries.length;
+  const perfectStreak  = calcStreak(perfectEntries, playedToday);
+  const streakRecord   = calcLongestStreak(history);
+  const perfectStreakRecord = calcLongestStreak(perfectEntries);
 
   document.getElementById('stat-total').textContent   = totalScore.toLocaleString();
   document.getElementById('stat-streak').textContent  = streak;
   document.getElementById('stat-perfect').textContent = perfectFlocks;
   document.getElementById('stat-pstreak').textContent = perfectStreak;
   document.getElementById('stats-grid').classList.remove('hidden');
-  renderHistoryBars(history);
+  renderHistoryBars(history, streakRecord, perfectStreakRecord);
 }
 
 function tierColor(ms) {
@@ -567,10 +581,14 @@ function tierColor(ms) {
   return '#2a5a1a';                 // Easy — green
 }
 
-function renderHistoryBars(history) {
+function renderHistoryBars(history, streakRecord, perfectStreakRecord) {
   const container = document.getElementById('history-bars');
   if (!container) return;
-  container.innerHTML = '<p class="history-heading">HISTORY</p>';
+  container.innerHTML = `
+    <p class="history-heading">HISTORY</p>
+    <p class="history-record">Streak Record: ${streakRecord}</p>
+    <p class="history-record">Perfect Streak Record: ${perfectStreakRecord}</p>
+  `;
   container.classList.remove('hidden');
 
   const sorted = [...history].sort((a, b) => b.date.localeCompare(a.date));
