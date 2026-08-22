@@ -488,7 +488,8 @@ const SHARE_PHRASES = [
   "My head is so big they call me Jack 'n the Flocks.",
   "Flock-a-Bye baby.",
   "Looks like you just landed on Plymouth Flock",
-  "Find the kind of flock that doesn't find you."
+  "Find the kind of flock that doesn't find you.",
+  "This flock doesn't record your license plate."
 ];
 
 function shareResult() {
