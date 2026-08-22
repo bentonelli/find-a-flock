@@ -466,7 +466,7 @@ function showLearnMore(species) {
 /* ── Share ────────────────────────────────────────────── */
 const SHARE_PHRASES = [
   "If you're not flockin', you ain't rockin'.",
-  "Favorite song: Walk It, Flock It ft. Drake",
+  "Favorite song: Walk It, Flock It ft. Drake.",
   "Flock it like it's hot.",
   "Tick-Tock, time to flock.",
   "If u talk the talk, u gotta flock the flock.",
@@ -478,16 +478,17 @@ const SHARE_PHRASES = [
   "This game will knock your flocks off!",
   "I need a flocktail after that score...",
   "Flock, Flock – Who's there?",
-  "Flock and load",
+  "Flock and load.",
   "Twist it, pull it, flick it, flock it.",
   "That's what I'm flockin' about!",
   "Favorite bird: Northern Flocker.",
   "This game will knock your flocks off.",
   "Flocked and loaded.",
   "Think outside the flocks.",
-  "My head is so big they call me Jack 'n the Flocks",
+  "My head is so big they call me Jack 'n the Flocks.",
   "Flock-a-Bye baby.",
-  "Looks like you just landed on Plymouth Flock"
+  "Looks like you just landed on Plymouth Flock",
+  "Find the kind of flock that doesn't find you."
 ];
 
 function shareResult() {
