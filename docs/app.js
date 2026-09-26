@@ -605,8 +605,10 @@ function tierColor(ms) {
 function renderHistoryBars(history, streakRecord, perfectStreakRecord) {
   const container = document.getElementById('history-bars');
   if (!container) return;
+  const maxPossible = history.reduce((s, e) => s + (e.maxScore ?? 500), 0);
   container.innerHTML = `
     <p class="history-heading">HISTORY</p>
+    <p class="history-record">Maximum Points Possible: ${maxPossible.toLocaleString()}</p>
     <p class="history-record">Streak Record: ${streakRecord}</p>
     <p class="history-record">Perfect Streak Record: ${perfectStreakRecord}</p>
   `;
