@@ -197,7 +197,44 @@ async function onMapClick(e) {
     showOutOfBounds(e.latlng.lat, e.latlng.lng);
     return;
   }
-  handleGuess(e.latlng.lat, e.latlng.lng, false);
+  showConfirmGuess(e.latlng.lat, e.latlng.lng);
+}
+
+// Ask before locking in a guess; clicking elsewhere on the map moves the pending pin
+function showConfirmGuess(lat, lng) {
+  const pin = L.marker([lat, lng], {
+    icon: L.divIcon({
+      className: '',
+      html: '<div class="guess-pin-outer"><div class="guess-pin pending"></div></div>',
+      iconSize: [20, 20],
+      iconAnchor: [10, 10]
+    }),
+    interactive: false
+  }).addTo(map);
+
+  const content = document.createElement('div');
+  content.className = 'confirm-guess';
+  content.innerHTML = `
+    <p class="confirm-guess-title">Confirm guess?</p>
+    <div class="confirm-guess-btns">
+      <button class="confirm-guess-btn yes">Yes</button>
+      <button class="confirm-guess-btn no">No</button>
+    </div>`;
+
+  let confirmed = false;
+  const popup = L.popup({ className: 'confirm-popup', closeButton: false, offset: [0, -6] })
+    .setLatLng([lat, lng])
+    .setContent(content)
+    .on('remove', () => { if (!confirmed) pin.remove(); })
+    .openOn(map);
+
+  content.querySelector('.yes').addEventListener('click', () => {
+    confirmed = true;
+    pin.remove();
+    map.closePopup(popup);
+    handleGuess(lat, lng, false);
+  });
+  content.querySelector('.no').addEventListener('click', () => map.closePopup(popup));
 }
 
 /* ── Guess logic ──────────────────────────────────────── */

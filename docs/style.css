@@ -608,6 +608,42 @@ body::after {
   box-shadow: 0 1px 4px rgba(0,0,0,.45);
 }
 
+.guess-pin.pending { background: var(--dim); }
+
+/* Confirm-guess popup: restyle Leaflet's rounded bubble to match the pixel UI */
+.confirm-popup .leaflet-popup-content-wrapper {
+  background: var(--panel);
+  border: 2px solid var(--border);
+  border-radius: 0;
+  box-shadow: 0 2px 8px rgba(42,32,24,.3);
+}
+.confirm-popup .leaflet-popup-content { margin: 10px 12px; }
+.confirm-popup .leaflet-popup-tip {
+  background: var(--border);
+  box-shadow: none;
+}
+.confirm-guess { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.confirm-guess-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: .6rem;
+  color: var(--text);
+  white-space: nowrap;
+  margin: 0 !important;
+}
+.confirm-guess-btns { display: flex; gap: 8px; }
+.confirm-guess-btn {
+  padding: 7px 12px;
+  background: var(--panel);
+  border: 2px solid var(--border);
+  color: var(--text);
+  font-family: 'Press Start 2P', monospace;
+  font-size: .55rem;
+  cursor: pointer;
+  transition: background .15s, color .15s, border-color .15s;
+}
+.confirm-guess-btn.yes:hover { background: var(--green); border-color: var(--green); color: var(--panel); }
+.confirm-guess-btn.no:hover  { background: var(--red);   border-color: var(--red);   color: var(--panel); }
+
 .score-popup-wrap {
   position: relative;
 }
