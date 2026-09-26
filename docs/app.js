@@ -363,6 +363,13 @@ function showResult(score, distKm) {
   // Message
   document.getElementById('result-message').textContent = resultMessage(score);
 
+  // Dodo award
+  const award   = dodoAward(score, maxScore);
+  const awardEl = document.getElementById('award-message');
+  awardEl.textContent = award === 'golden' ? 'Golden Dodo Award!' : award === 'dodo' ? 'Dodo Award!' : '';
+  awardEl.classList.toggle('golden', award === 'golden');
+  awardEl.classList.toggle('hidden', !award);
+
   // Distance text
   const distEl = document.getElementById('distance-text');
   if (distKm === 0) {
@@ -405,6 +412,14 @@ function resultMessage(score) {
   if (score >= maxScore * 0.3)  return 'Not there!';
   if (score >= maxScore * 0.1)  return '...darn';
   return 'for flocks sake...';
+}
+
+// Near-misses: 'golden' when 1 point off, 'dodo' when 2–9 points off
+function dodoAward(score, ms) {
+  const off = ms - score;
+  if (off === 1) return 'golden';
+  if (off > 1 && off < 10) return 'dodo';
+  return null;
 }
 
 /* ── Stat birds ───────────────────────────────────────── */
@@ -567,11 +582,15 @@ function showStats() {
   const perfectStreak  = calcStreak(perfectEntries, playedToday);
   const streakRecord   = calcLongestStreak(history);
   const perfectStreakRecord = calcLongestStreak(perfectEntries);
+  const dodos          = history.filter(e => dodoAward(e.score, e.maxScore ?? 500) === 'dodo').length;
+  const goldenDodos    = history.filter(e => dodoAward(e.score, e.maxScore ?? 500) === 'golden').length;
 
   document.getElementById('stat-total').textContent   = totalScore.toLocaleString();
   document.getElementById('stat-streak').textContent  = streak;
   document.getElementById('stat-perfect').textContent = perfectFlocks;
   document.getElementById('stat-pstreak').textContent = perfectStreak;
+  document.getElementById('stat-dodo').textContent    = dodos;
+  document.getElementById('stat-golden-dodo').textContent = goldenDodos;
   document.getElementById('stats-grid').classList.remove('hidden');
   renderHistoryBars(history, streakRecord, perfectStreakRecord);
 }

@@ -264,6 +264,13 @@ body::after {
   line-height: 1.7;
   padding: 0 12px;
 }
+.award-message {
+  font-family: 'Press Start 2P', monospace;
+  font-size: .55rem;
+  color: #5a4a3a;
+  line-height: 1.7;
+}
+.award-message.golden { color: #c8a820; }
 .distance-text {
   font-family: 'VT323', monospace;
   font-size: 1rem;
@@ -320,7 +327,8 @@ body::after {
   gap: 6px;
 }
 
-.stat-bird {
+.stat-bird,
+.stat-award {
   width: 48px;
   height: 48px;
   image-rendering: pixelated;
@@ -343,6 +351,16 @@ body::after {
   letter-spacing: .5px;
   text-align: center;
   line-height: 1.2;
+}
+
+.stat-sublabel {
+  font-family: 'VT323', monospace;
+  font-size: .8rem;
+  color: var(--dim);
+  opacity: .75;
+  text-align: center;
+  line-height: 1;
+  margin-top: -4px;
 }
 
 .comeback-text {
