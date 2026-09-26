@@ -229,6 +229,8 @@ function showConfirmGuess(lat, lng) {
     .openOn(map);
 
   content.querySelector('.yes').addEventListener('click', () => {
+    // Buttons stay clickable while a closed popup fades out; ignore double-taps and stale popups
+    if (hasGuessed || !map.hasLayer(popup)) return;
     confirmed = true;
     pin.remove();
     map.closePopup(popup);
@@ -298,7 +300,8 @@ function calcScore(lat, lng, hull) {
   const poly = turf.feature(hull);
   if (turf.booleanPointInPolygon(pt, poly)) return maxScore;
   const d = distToPolygon(lat, lng, hull);
-  return Math.max(0, Math.round(maxScore * Math.exp(-d / DECAY_KM)));
+  // Cap at max - 1 so only guesses inside the zone can score a perfect
+  return Math.max(0, Math.min(maxScore - 1, Math.round(maxScore * Math.exp(-d / DECAY_KM))));
 }
 
 function distToPolygon(lat, lng, hull) {
@@ -412,7 +415,8 @@ function showResult(score, distKm) {
   if (distKm === 0) {
     distEl.textContent = 'You got it!';
   } else {
-    distEl.textContent = `${Math.round(distKm).toLocaleString()} km from the zone`;
+    const km = Math.round(distKm);
+    distEl.textContent = km < 1 ? 'less than 1 km from the zone' : `${km.toLocaleString()} km from the zone`;
   }
 
   // Share button
